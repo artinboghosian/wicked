@@ -145,7 +145,8 @@ You can also pass a block to `render_wizard` that will be executed only when the
 ```ruby
 def update
   @user = current_user
-  @user.update(user_params)
+  @user.assign_attributes(user_params)
+
   render_wizard(@user) do
     # This block executes only if @user.save succeeds
     UserMailer.wizard_completed(@user).deliver_later
