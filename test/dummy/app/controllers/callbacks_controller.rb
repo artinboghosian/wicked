@@ -1,7 +1,6 @@
 class CallbacksController < ApplicationController
   include Wicked::Wizard
 
-  # Class-level counter to track callback execution
   class CallbackCounter
     @@count = 0
 
@@ -25,7 +24,6 @@ class CallbacksController < ApplicationController
   end
 
   def update
-    # Determine success/failure based on step
     value = case step
             when :success_step
               true
@@ -35,7 +33,7 @@ class CallbacksController < ApplicationController
 
     @bar = Bar.new(value)
 
-    render_wizard(@bar, notice: "Update attempted for #{step}.") do
+    render_wizard(@bar) do
       CallbackCounter.increment
     end
   end
