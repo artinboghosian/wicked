@@ -1,8 +1,8 @@
 module Wicked::Controller::Concerns::RenderRedirect
   extend ActiveSupport::Concern
 
-  def render_wizard(resource = nil, options = {}, params = {})
-    process_resource!(resource, options)
+  def render_wizard(resource = nil, options = {}, params = {}, &)
+    process_resource!(resource, options, &)
 
     if @skip_to
       url_params = (@wicked_redirect_params || {}).merge(params)
@@ -12,7 +12,7 @@ module Wicked::Controller::Concerns::RenderRedirect
     end
   end
 
-  def process_resource!(resource, options = {})
+  def process_resource!(resource, options = {}, &)
     return unless resource
 
     if options[:context]
@@ -23,6 +23,8 @@ module Wicked::Controller::Concerns::RenderRedirect
 
     if did_save
       @skip_to ||= @next_step
+
+      yield if block_given?
     else
       @skip_to = nil
       # Do not override user-provided status for render
